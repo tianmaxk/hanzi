@@ -32,6 +32,9 @@ public class IndexController {
 	@Value("${img.location}")
     private String location;
 	
+	@Value("${tesseract.tessdata}")
+    private String tessdata;
+	
 	@RequestMapping("/")
 	public String renderIndex(Map<String,Object> result){
 		result.put("name", "taomin");
@@ -147,7 +150,8 @@ public class IndexController {
             if(file_name!=null && !file_name.isEmpty()){
             	 File imageFile = new File(filePath+"/"+file_name);
                  ITesseract instance = new Tesseract();     
-                 instance.setDatapath("/Users/dev_ios/Downloads/tesseract-master/tessdata");
+//                 instance.setDatapath("/Users/dev_ios/Downloads/tesseract-master/tessdata");
+                 instance.setDatapath(tessdata);
                  // 默认是英文（识别字母和数字），如果要识别中文(数字 + 中文），需要制定语言包
                  instance.setLanguage("chi_sim");
                  try{

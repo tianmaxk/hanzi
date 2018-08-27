@@ -1,4 +1,10 @@
 propvalue: productionvalue
 
+img:
+  location: /Users/dev_ios/Downloads/files
+
+tesseract:
+  tessdata: /Users/dev_ios/Downloads/tesseract-master/tessdata
+
 server:
   port: 8081
