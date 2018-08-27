@@ -1,0 +1,4 @@
+propvalue: productionvalue
+
+server:
+  port: 8081
