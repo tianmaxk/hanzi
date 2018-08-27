@@ -149,7 +149,7 @@ public class IndexController {
                  ITesseract instance = new Tesseract();     
                  instance.setDatapath("/Users/dev_ios/Downloads/tesseract-master/tessdata");
                  // 默认是英文（识别字母和数字），如果要识别中文(数字 + 中文），需要制定语言包
-//                 instance.setLanguage("chi_sim");
+                 instance.setLanguage("chi_sim");
                  try{
                      String result = instance.doOCR(imageFile);
                      return "上传文件解析成功："+result;
