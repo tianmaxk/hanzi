@@ -2,6 +2,7 @@ package com.example.hanzi;
 
 import java.util.Map;
 import java.util.Set;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,10 @@ import com.example.hanzi.common.DBAutoUtil;
 import com.example.hanzi.common.ImageUtil;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
 
 @Controller
 public class IndexController {
@@ -113,6 +118,44 @@ public class IndexController {
             file_name = ImageUtil.saveImg(multipartFile, filePath);
             if(file_name!=null && !file_name.isEmpty()){
                 return "上传成功，文件名："+file_name;
+            }
+            return "上传失败";
+        } catch (Exception e) {
+            return "SAVE_IMG_ERROE";
+        }
+    }
+
+	@RequestMapping("/file/recognizeImg")
+	@ResponseBody
+    public String recognizeImg(@RequestParam("image-file") MultipartFile multipartFile)  {
+        if (multipartFile.isEmpty() || multipartFile.getOriginalFilename().isEmpty()) {
+           return "IMG_NOT_EMPTY";
+        }
+        String contentType = multipartFile.getContentType();
+        if (!contentType.contains("")) {
+            return "Format Error";
+        }
+        String root_fileName = multipartFile.getOriginalFilename();
+        log.info("上传图片:name={},type={}", root_fileName, contentType);
+        
+        //获取路径
+        String filePath = location;
+        log.info("图片保存路径={}", filePath);
+        String file_name = null;
+        try {
+            file_name = ImageUtil.saveImg(multipartFile, filePath);
+            if(file_name!=null && !file_name.isEmpty()){
+            	 File imageFile = new File(filePath+"/"+file_name);
+                 ITesseract instance = new Tesseract();     
+                 instance.setDatapath("/Users/dev_ios/Downloads/tesseract-master/tessdata");
+                 // 默认是英文（识别字母和数字），如果要识别中文(数字 + 中文），需要制定语言包
+//                 instance.setLanguage("chi_sim");
+                 try{
+                     String result = instance.doOCR(imageFile);
+                     return "上传文件解析成功："+result;
+                 }catch(TesseractException e){
+                     return "上传文件解析失败："+e.getMessage();
+                 }
             }
             return "上传失败";
         } catch (Exception e) {
