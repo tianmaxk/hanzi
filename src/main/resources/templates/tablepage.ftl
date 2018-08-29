@@ -2,6 +2,15 @@
 <!-- 导入自定义ftl -->
 <#import "page.ftl" as cast/>
 <html>
+<head>
+	<style>
+	th,td {
+		word-wrap:break-word;
+		/*word-break:break-all;*/
+		max-width:400px;
+	}
+	</style>
+</head>
 	<body>
 		<div>表名：${tablename}</div><br/>
 		<div>关键字搜索：<input type="text" id="keyword" style="width:200px;" />&nbsp;&nbsp;<input type="button" value="搜索" onclick="find();" /></div>
@@ -14,7 +23,7 @@
 			<#list contents as x>
 			<tr>
 				<#list columns as col>
-				<td>${x[col]}</td>
+				<td>${x[col]!""}</td>
 				</#list>
 			</tr>
 			</#list>
