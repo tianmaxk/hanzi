@@ -1,5 +1,6 @@
 package com.example.hanzi.model;
 
+import com.example.hanzi.common.HanziUtil;
 import com.jfinal.plugin.activerecord.Model;
 
 @SuppressWarnings("serial")
@@ -9,10 +10,11 @@ public class PinyinMap extends Model<PinyinMap> {
 
 	public boolean add(String name, String pinyin) {
 		try {
-			PinyinMap pymap = PinyinMap.dao.findFirst("select * from "+PinyinMap.table+" where name=? and pinyin=?",name,pinyin);
+			String pystr = HanziUtil.genPinyinStr(pinyin);
+			PinyinMap pymap = PinyinMap.dao.findFirst("select * from "+PinyinMap.table+" where name=? and pinyin=?",name,pystr);
 			if(pymap==null) {
 				pymap = new PinyinMap();
-				pymap.set("name", name).set("pinyin", pinyin).save();
+				pymap.set("name", name).set("pinyin", pystr).save();
 			}
 			return true;
 		}catch(Exception ex) {

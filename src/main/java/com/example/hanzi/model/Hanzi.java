@@ -48,7 +48,7 @@ public class Hanzi extends Model<Hanzi> {
 	//通过文字找汉字信息
 	public String findHanziByName(String name) {
 		Hanzi hanzi = Hanzi.dao.findFirst("select * from "+Hanzi.table+" where name=?",name);
-		String sql = "select a.pinyin,b.fayin from (select pinyin from "+PinyinMap.table+" where name=?) a left join "+Pinyin.table+" b on a.pinyin=b.name";
+		String sql = "select b.name,b.fayin from (select pinyin from "+PinyinMap.table+" where name=?) a left join "+Pinyin.table+" b on a.pinyin=b.py";
 		List<PinyinMap> pylist = PinyinMap.dao.find(sql,name);
 		return String.format("{\"hanzi\":%s,\"pylist\":%s}", JsonKit.toJson(hanzi),JsonKit.toJson(pylist));
 	}

@@ -10,18 +10,13 @@ public class Pinyin extends Model<Pinyin> {
 	
 	public boolean add(String pinyin,String fayin) {
 		try {
-			boolean existed = true;
-			Pinyin py = Pinyin.dao.findFirst("select * from "+Pinyin.table+" where name=?",pinyin);
+			String pystr = HanziUtil.genPinyinStr(pinyin);
+			Pinyin py = Pinyin.dao.findFirst("select * from "+Pinyin.table+" where py=?",pystr);
 			if(py==null) {
-				existed = false;
 				py = new Pinyin();
-			}
-			py.set("name", pinyin);
-			py.set("py", HanziUtil.genPinyinStr(pinyin));
-			py.set("fayin", fayin);
-			if(existed) {
-				py.update();
-			} else {
+				py.set("name", pinyin);
+				py.set("py", pystr);
+				py.set("fayin", fayin);
 				py.save();
 			}
 			return true;
