@@ -27,9 +27,15 @@ public class HanziController {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
     
     @RequestMapping("/find")
-    public String findByName(String name){
+    public String find(String name){
     	log.info("findhanzi:"+name);
     	return JsonKit.toJson(Hanzi.dao.findFirst("select * from "+Hanzi.table+" where name=?",name));
+    }
+    
+    @RequestMapping("/findByName")
+    public String findByName(String name){
+    	log.info("findByName:"+name);
+    	return Hanzi.dao.findHanziByName(name);
     }
     
     @RequestMapping("/insert")
@@ -74,5 +80,22 @@ public class HanziController {
     	log.info("desc");
     	Table table = TableMapping.me().getTable(Hanzi.class);
     	return table.getColumnTypeMap().toString();
+    }
+    
+    @RequestMapping("/buildPinyin")
+    public String buildPinyin() {
+    	log.info("buildPinyin");
+    	boolean ret = Hanzi.dao.convertToPinyinStr();
+    	return ret?"success":"failed";
+    }
+
+    @RequestMapping("/addPinyin")
+    public String addPinyin(String name, String[] pylist, String[] fayinlist) {
+    	log.info("addPinyin: "+name);
+//    	for(int i=0;i<pylist.length;i++) {
+//    		log.info("pylist["+i+"]:"+pylist[i]+" ; fayinlist["+i+"]:"+fayinlist[i]);
+//    	}
+    	boolean ret = Hanzi.dao.addPinyin(name, pylist, fayinlist);
+    	return ret?"success":"failed";
     }
 }

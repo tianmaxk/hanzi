@@ -6,8 +6,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import com.example.hanzi.model.Hanzi;
-import com.example.hanzi.model.Users;
+import com.example.hanzi.model.*;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 
@@ -28,6 +27,8 @@ public class HanziApplication {
 		ActiveRecordPlugin arp = new ActiveRecordPlugin(dp);
 		arp.addMapping("users", Users.class);
 		arp.addMapping("hanzi", Hanzi.class);
+		arp.addMapping("pinyin", Pinyin.class);
+		arp.addMapping("pinyinmap", PinyinMap.class);
 		// 与web环境唯一的不同是要手动调用一次相关插件的start()方法
 		dp.start();
 		arp.start();
